@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AntdConfigProvider } from "@/components/Providers/AntdConfigProvider";
 import { ThemeProvider } from "@/components/Providers/ThemeProvider";
+import { SuspenseProvider } from "@/components/Providers/SuspenseProvider";
 import { MainLayout } from "@/components/Layout/MainLayout";
 
 export const metadata: Metadata = {
@@ -19,7 +20,9 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <AntdConfigProvider>
-            <MainLayout>{children}</MainLayout>
+            <SuspenseProvider>
+              <MainLayout>{children}</MainLayout>
+            </SuspenseProvider>
           </AntdConfigProvider>
         </ThemeProvider>
       </body>

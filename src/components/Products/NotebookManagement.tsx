@@ -119,7 +119,15 @@ export const NotebookManagement: React.FC = () => {
   };
 
   // 处理销售
-  const handleSale = async (values: any) => {
+  const handleSale = async (values: {
+    quantity: number;
+    ringColors?: Array<{ ringId: string; quantity: number }>;
+  }) => {
+    if (!selectedNotebook) {
+      message.error("未选择收纳册");
+      return;
+    }
+
     const { quantity, ringColors } = values;
     const config =
       NOTEBOOK_MATERIAL_CONFIG[
@@ -144,28 +152,31 @@ export const NotebookManagement: React.FC = () => {
 
       // 扣除环扣
       if (config.rings > 0 && ringColors) {
-        ringColors.forEach((colorConfig: any) => {
-          addTransaction(colorConfig.ringId, {
-            date: new Date(),
-            type: "out",
-            quantity: colorConfig.quantity,
-            unitPrice: getMaterialStock(colorConfig.ringId)?.averagePrice || 0,
-            orderId: `SALE-${Date.now()}`,
-            notes: `${selectedNotebook.name} 销售消耗`,
-          });
-        });
+        ringColors.forEach(
+          (colorConfig: { ringId: string; quantity: number }) => {
+            addTransaction(colorConfig.ringId, {
+              date: new Date(),
+              type: "out",
+              quantity: colorConfig.quantity,
+              unitPrice:
+                getMaterialStock(colorConfig.ringId)?.averagePrice || 0,
+              orderId: `SALE-${Date.now()}`,
+              notes: `${selectedNotebook.name} 销售消耗`,
+            });
+          }
+        );
       }
 
       message.success("销售记录成功，材料库存已更新");
       setSaleModalVisible(false);
       saleForm.resetFields();
-    } catch (error) {
+    } catch {
       message.error("销售记录失败");
     }
   };
 
   // 表格列定义
-  const columns: ColumnsType<any> = [
+  const columns: ColumnsType<Product> = [
     {
       title: "收纳册名称",
       dataIndex: "name",
@@ -215,12 +226,10 @@ export const NotebookManagement: React.FC = () => {
         return (
           <div className="space-y-1">
             <div className="text-xs">
-              <Tag color="blue" size="small">
-                {config.rings}个环扣
-              </Tag>
+              <Tag color="blue">{config.rings}个环扣</Tag>
             </div>
             <div className="text-xs">
-              <Tag color="green" size="small">
+              <Tag color="green">
                 {config.paperCount}张
                 {config.paper === "sulfuric-a4" ? "A4" : "B5"}硫酸纸
               </Tag>
@@ -352,7 +361,7 @@ export const NotebookManagement: React.FC = () => {
                 <Form.List name="ringColors">
                   {(fields, { add, remove }) => (
                     <div>
-                      {fields.map((field, index) => (
+                      {fields.map((field) => (
                         <div
                           key={field.key}
                           className="flex items-center space-x-2 mb-2"

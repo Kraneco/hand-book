@@ -124,7 +124,7 @@ export const ProductList: React.FC = () => {
       key: "action",
       width: 120,
       fixed: "right",
-      render: (_, record) => (
+      render: () => (
         <Space size="small">
           <Button type="link" size="small">
             编辑
