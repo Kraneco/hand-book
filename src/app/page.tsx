@@ -1,103 +1,167 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React from "react";
+import Link from "next/link";
+import { Card, Row, Col, Statistic } from "antd";
+import {
+  ShoppingOutlined,
+  InboxOutlined,
+  DollarOutlined,
+  AlertOutlined,
+} from "@ant-design/icons";
+import { useProductStore } from "@/stores/productStore";
+import { useMaterialStore } from "@/stores/materialStore";
+import { useThemeStore } from "@/stores/themeStore";
+import { getTextColor } from "@/utils/themeUtils";
+import { APP_NAME } from "@/utils/const";
+
+export default function HomePage() {
+  const { products } = useProductStore();
+  const { materials } = useMaterialStore();
+  const { theme } = useThemeStore();
+
+  // 计算统计数据
+  const totalProducts = products.length;
+  const totalValue = products.reduce(
+    (sum, product) => sum + product.price * product.stock,
+    0
+  );
+
+  // 扁平化材料数据计算
+  const flatMaterials = materials.reduce((acc: typeof materials, material) => {
+    if (material.children) {
+      acc.push(...material.children);
+    } else {
+      acc.push(material);
+    }
+    return acc;
+  }, []);
+
+  const lowStockMaterials = flatMaterials.filter(
+    (m) => !m.isStockSufficient
+  ).length;
+  const materialValue = flatMaterials.reduce(
+    (sum, material) => sum + material.stock * material.averagePrice,
+    0
+  );
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="space-y-6">
+      <div className="mb-6">
+        <h1
+          className="text-3xl font-bold mb-2"
+          style={{ color: getTextColor(theme, "primary") }}
+        >
+          欢迎使用{APP_NAME}
+        </h1>
+        <p style={{ color: getTextColor(theme, "secondary") }}>
+          收纳册进销存管理系统 - 实时监控库存，管理产品和材料
+        </p>
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      {/* 统计卡片 */}
+      <Row gutter={16}>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="商品总数"
+              value={totalProducts}
+              prefix={<ShoppingOutlined />}
+              valueStyle={{ color: "#3f8600" }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="商品总价值"
+              value={totalValue}
+              precision={2}
+              prefix={<DollarOutlined />}
+              suffix="元"
+              valueStyle={{ color: "#1890ff" }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="材料价值"
+              value={materialValue}
+              precision={2}
+              prefix={<InboxOutlined />}
+              suffix="元"
+              valueStyle={{ color: "#722ed1" }}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="库存不足材料"
+              value={lowStockMaterials}
+              prefix={<AlertOutlined />}
+              valueStyle={{
+                color: lowStockMaterials > 0 ? "#cf1322" : "#3f8600",
+              }}
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      {/* 快速操作 */}
+      <Card title="快速操作" className="shadow-sm">
+        <Row gutter={16}>
+          <Col xs={24} sm={8}>
+            <Link href="/products">
+              <Card hoverable className="text-center cursor-pointer">
+                <ShoppingOutlined className="text-4xl text-blue-500 mb-4" />
+                <h3
+                  className="text-lg font-medium"
+                  style={{ color: getTextColor(theme, "primary") }}
+                >
+                  商品管理
+                </h3>
+                <p style={{ color: getTextColor(theme, "muted") }}>
+                  管理收纳册产品
+                </p>
+              </Card>
+            </Link>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Link href="/materials">
+              <Card hoverable className="text-center cursor-pointer">
+                <InboxOutlined className="text-4xl text-green-500 mb-4" />
+                <h3
+                  className="text-lg font-medium"
+                  style={{ color: getTextColor(theme, "primary") }}
+                >
+                  材料管理
+                </h3>
+                <p style={{ color: getTextColor(theme, "muted") }}>
+                  进销存管理
+                </p>
+              </Card>
+            </Link>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Link href="/notebooks">
+              <Card hoverable className="text-center cursor-pointer">
+                <DollarOutlined className="text-4xl text-purple-500 mb-4" />
+                <h3
+                  className="text-lg font-medium"
+                  style={{ color: getTextColor(theme, "primary") }}
+                >
+                  收纳册管理
+                </h3>
+                <p style={{ color: getTextColor(theme, "muted") }}>
+                  销售和库存
+                </p>
+              </Card>
+            </Link>
+          </Col>
+        </Row>
+      </Card>
     </div>
   );
 }

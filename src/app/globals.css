@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,4 +31,186 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* 确保暗色模式下的文本颜色 */
+.dark {
+  color: #f9fafb;
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #f9fafb;
+}
+
+.dark p {
+  color: #e5e7eb;
+}
+
+.dark span {
+  color: inherit;
+}
+
+/* 确保表格文本在暗色模式下可见 */
+.dark .ant-table-cell {
+  color: #f9fafb !important;
+}
+
+.dark .ant-descriptions-item-label {
+  color: #e5e7eb !important;
+}
+
+.dark .ant-descriptions-item-content {
+  color: #f9fafb !important;
+}
+
+/* 展开行的样式 */
+.ant-table-expanded-row > td {
+  padding: 8px 16px !important;
+}
+
+/* 透明环展开行的特殊样式 */
+.transparent-ring-children {
+  background: linear-gradient(
+    90deg,
+    rgba(24, 144, 255, 0.05) 0%,
+    transparent 100%
+  );
+  border-radius: 6px;
+  padding: 12px;
+}
+
+/* 子项卡片样式 */
+.transparent-ring-children .border-l-3 {
+  border-left-width: 3px;
+}
+
+/* 子项卡片悬停效果 */
+.transparent-ring-children > div > div:hover {
+  transform: translateX(2px);
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark .transparent-ring-children > div > div:hover {
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* 固定列样式优化 */
+.ant-table-fixed-right {
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark .ant-table-fixed-right {
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 固定列背景 */
+.ant-table-tbody > tr > .ant-table-cell-fix-right {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.dark .ant-table-tbody > tr > .ant-table-cell-fix-right {
+  background: rgba(31, 31, 31, 0.95);
+}
+
+/* 固定列悬停效果 */
+.ant-table-tbody > tr:hover > .ant-table-cell-fix-right {
+  background: rgba(250, 250, 250, 0.98);
+}
+
+.dark .ant-table-tbody > tr:hover > .ant-table-cell-fix-right {
+  background: rgba(45, 45, 45, 0.98);
+}
+
+/* Ant Design 暗色主题覆盖 */
+.dark .ant-layout {
+  background: #141414 !important;
+}
+
+.dark .ant-layout-header {
+  background: #1f1f1f !important;
+  border-bottom: 1px solid #303030 !important;
+}
+
+.dark .ant-layout-sider {
+  background: #1f1f1f !important;
+}
+
+.dark .ant-menu {
+  background: #1f1f1f !important;
+  color: #ffffff !important;
+}
+
+.dark .ant-menu-item {
+  color: #ffffff !important;
+}
+
+.dark .ant-menu-item:hover {
+  background: #303030 !important;
+}
+
+.dark .ant-menu-item-selected {
+  background: #1890ff !important;
+}
+
+.dark .ant-table {
+  background: #1f1f1f !important;
+}
+
+.dark .ant-table-thead > tr > th {
+  background: #262626 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #303030 !important;
+}
+
+.dark .ant-table-tbody > tr > td {
+  background: #1f1f1f !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #303030 !important;
+}
+
+.dark .ant-table-tbody > tr:hover > td {
+  background: #262626 !important;
+}
+
+.dark .ant-card {
+  background: #1f1f1f !important;
+  border: 1px solid #303030 !important;
+}
+
+.dark .ant-card-head {
+  background: #262626 !important;
+  border-bottom: 1px solid #303030 !important;
+}
+
+.dark .ant-card-head-title {
+  color: #ffffff !important;
+}
+
+.dark .ant-input {
+  background: #262626 !important;
+  border: 1px solid #404040 !important;
+  color: #ffffff !important;
+}
+
+.dark .ant-select-selector {
+  background: #262626 !important;
+  border: 1px solid #404040 !important;
+  color: #ffffff !important;
+}
+
+.dark .ant-btn {
+  border: 1px solid #404040 !important;
+}
+
+.dark .ant-btn-primary {
+  background: #1890ff !important;
+  border-color: #1890ff !important;
 }
